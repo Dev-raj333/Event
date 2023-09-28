@@ -9,18 +9,22 @@ public class Venue {
     private String email;
     private String number;
 
+    private String venueType;
+
     // Empty constructor required for Firebase
     public Venue() {
     }
 
     // Constructor with all fields including venueId
     public Venue(String venueId, String name, String address, String occupancy, String email, String number) {
+    //public Venue(String venueId, String name, String address, String occupancy, String email, String number, String venueType)
         this.venueId = venueId;
         this.name = name;
         this.address = address;
         this.occupancy = occupancy;
         this.email = email;
         this.number = number;
+        this.venueType= "Wedding"; //venueType;
     }
 
     // Getter and setter methods for all fields
@@ -51,6 +55,13 @@ public class Venue {
         return number;
     }
 
-    // ... Implement getter and setter methods for other fields
+    public String getVenueType() {
+        return venueType;
+    }
+
+    public void setVenueType(String venueType) {
+        this.venueType = venueType;
+    }
+// ... Implement getter and setter methods for other fields
 }
 

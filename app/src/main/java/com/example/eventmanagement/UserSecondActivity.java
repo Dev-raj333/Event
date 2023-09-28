@@ -163,7 +163,7 @@ public class UserSecondActivity extends AppCompatActivity {
 
             // Save the user data to the database under the user's ID
            // eventsRef.child(userId).child("selectedHotel").setValue(selectHotel); //now
-            eventsRef.child(userId).setValue(event);
+//            eventsRef.child(userId).setValue(event);
 
         }
     }

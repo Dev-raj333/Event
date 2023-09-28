@@ -1,6 +1,7 @@
 package com.example.eventmanagement;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,9 @@ public class UserViewDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // Initialize Firebase Database reference
-        userRef = FirebaseDatabase.getInstance().getReference().child("Events");
+        userRef = FirebaseDatabase.getInstance().getReference("Events");
+                //getReference().child("Events");
+
 
         // Initialize Firebase Authentication
         firebaseAuth = FirebaseAuth.getInstance();
@@ -48,14 +51,21 @@ public class UserViewDetailsFragment extends Fragment {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
-
+Log.e("userId", "-"+userId);
             // Retrieve the user's data based on their UID
-            userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            userRef.child(userId).addValueEventListener
+                    //addListenerForSingleValueEvent
+                            (new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
+                        Log.e("dataSnapshot", "exists");
                         // Data exists for the user
                         Event event = dataSnapshot.getValue(Event.class);
+
+//                        Log.e("event", event);
+
+
 
                         // Populate UI elements with selected event details
                         selectedEventTextView.setText("Selected Event: " + event.getSelectedEvent());
@@ -68,6 +78,7 @@ public class UserViewDetailsFragment extends Fragment {
                         entryDateTextView.setText("Entry Date: " + event.getEntryDate());
                         exitDateTextView.setText("Exit Date: " + event.getExitDate());
                     } else {
+                        Log.e("dataSnapshot", "doesn't exists");
                         // Data does not exist for the user
                         // Handle this case (e.g., show an error message)
                     }

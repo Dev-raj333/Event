@@ -227,7 +227,7 @@ public class UserActivity extends AppCompatActivity {
             // Set other user properties...
 
             // Save the user data to the database under the user's ID
-            userRef.child(userId).setValue(event);
+//            userRef.child(userId).setValue(event);
         }
     }
 }

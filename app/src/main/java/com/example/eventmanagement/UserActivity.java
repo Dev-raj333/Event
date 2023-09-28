@@ -33,7 +33,7 @@ public class UserActivity extends AppCompatActivity {
     NavigationView nv;
     ActionBarDrawerToggle adt;
     Toolbar tb;
-    CardView cv1,cv2,cv3,cv4,cv5,cv6;
+    CardView cv1, cv2, cv3, cv4, cv5, cv6;
 
     private String selectEvent;
     private DatabaseReference userRef;
@@ -41,12 +41,13 @@ public class UserActivity extends AppCompatActivity {
 
 
     private void replaceFragment(Fragment fragment) {
+        fl.setVisibility(View.VISIBLE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.framelayout, fragment);
-               fragmentTransaction.commit();
+        fragmentTransaction.replace(R.id.framelayout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
-
 
 
     @Override
@@ -54,15 +55,16 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+
         firebaseAuth = FirebaseAuth.getInstance();
 
 
-        cv1=findViewById(R.id.card1);
-        cv2=findViewById(R.id.card2);
-        cv3=findViewById(R.id.card3);
-        cv4=findViewById(R.id.card4);
-        cv5=findViewById(R.id.card5);
-        cv6=findViewById(R.id.card6);
+        cv1 = findViewById(R.id.card1);
+        cv2 = findViewById(R.id.card2);
+        cv3 = findViewById(R.id.card3);
+        cv4 = findViewById(R.id.card4);
+        cv5 = findViewById(R.id.card5);
+        cv6 = findViewById(R.id.card6);
 
         userRef = FirebaseDatabase.getInstance().getReference().child("Events");
 
@@ -73,7 +75,7 @@ public class UserActivity extends AppCompatActivity {
                 selectEvent = "Wedding";
                 saveSelectedEventToDatabase();
 
-                Intent i = new Intent(UserActivity.this,UserSecondActivity.class);
+                Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
             }
@@ -84,7 +86,7 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 selectEvent = "Anniversary";
                 saveSelectedEventToDatabase();
-                Intent i = new Intent(UserActivity.this,UserSecondActivity.class);
+                Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
 
@@ -96,7 +98,7 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 selectEvent = "Birthday";
                 saveSelectedEventToDatabase();
-                Intent i = new Intent(UserActivity.this,UserSecondActivity.class);
+                Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
             }
@@ -106,7 +108,7 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "BachelorParty";
-                Intent i = new Intent(UserActivity.this,UserSecondActivity.class);
+                Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
             }
@@ -117,7 +119,7 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 selectEvent = "Meeting";
                 saveSelectedEventToDatabase();
-                Intent i = new Intent(UserActivity.this,UserSecondActivity.class);
+                Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
             }
@@ -128,7 +130,7 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 selectEvent = "Graduation";
                 saveSelectedEventToDatabase();
-                Intent i = new Intent(UserActivity.this,UserSecondActivity.class);
+                Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
             }
@@ -140,8 +142,8 @@ public class UserActivity extends AppCompatActivity {
         dl = findViewById(R.id.drawerlayout);
         tb = findViewById(R.id.toolbar);
         //ft = getSupportFragmentManager().beginTransaction();
-     //   ft.add(R.id.framelayout, new HomeFragment());
-     //    ft.commit();
+        //   ft.add(R.id.framelayout, new HomeFragment());
+        //    ft.commit();
 
         adt = new ActionBarDrawerToggle(UserActivity.this, dl, tb, R.string.open, R.string.close);
 
@@ -152,35 +154,41 @@ public class UserActivity extends AppCompatActivity {
 
 
                 int id = item.getItemId();
-                if (id==R.id.home) {
-
-                    ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.framelayout, new HomeFragment());
-                    ft.commit();
+                if (id == R.id.home) {
+//                    replaceFragment(new HomeFragment());
+                    fl.setVisibility(View.GONE);
                 }
-
-                if (id==R.id.profile) {
+                if (id == R.id.profile) {
 
                     replaceFragment(new UserProfileFragment());
                 }
 
 
                 if (id == R.id.details) {
-
-                    ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.framelayout, new UserViewDetailsFragment());
-                    ft.commit();
+                    replaceFragment(new UserViewDetailsFragment());
+//                    ft = getSupportFragmentManager().beginTransaction();
+//                    ft.replace(R.id.framelayout, new UserViewDetailsFragment());
+//                    ft.commit();
                 }
 
-                if(id ==R.id.changepw) {
-                    ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.framelayout, new ChangePasswordFragment());
-                    ft.commit();
+                if (id == R.id.changepw) {
+                    replaceFragment(new ChangePasswordFragment());
+//                    ft = getSupportFragmentManager().beginTransaction();
+//                    ft.replace(R.id.framelayout, new ChangePasswordFragment());
+//                    ft.commit();
                 }
+
+                if (id == R.id.review) {
+                    replaceFragment(new ReviewFragment());
+
+                }
+
+
                 if (id == R.id.logout) {
-                    ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.framelayout, new LogoutFragment());
-                    ft.commit();
+                    replaceFragment(new LogoutFragment());
+//                    ft = getSupportFragmentManager().beginTransaction();
+//                    ft.replace(R.id.framelayout, new LogoutFragment());
+//                    ft.commit();
 
                 }
                 dl.closeDrawers();
@@ -199,15 +207,13 @@ public class UserActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-        @Nullable
-        @Override
-        protected void onPostCreate (@Nullable Bundle savedInstanceState){
-            super.onPostCreate(savedInstanceState);
-            adt.syncState();
-        }
 
-
-
+    @Nullable
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        adt.syncState();
+    }
 
 
     private void saveSelectedEventToDatabase() {

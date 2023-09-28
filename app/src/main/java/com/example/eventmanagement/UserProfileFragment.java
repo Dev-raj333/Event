@@ -37,6 +37,10 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile,null);
 
+
+
+
+
         // Initialize the TextView fields
         textViewName = view.findViewById(R.id.editTextName);
         textViewAddress = view.findViewById(R.id.editaddress);

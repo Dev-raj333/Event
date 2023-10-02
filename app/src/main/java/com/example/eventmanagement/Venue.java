@@ -17,7 +17,6 @@ public class Venue {
 
     // Constructor with all fields including venueId
     public Venue(String venueId, String name, String address, String occupancy, String email, String number) {
-    //public Venue(String venueId, String name, String address, String occupancy, String email, String number, String venueType)
         this.venueId = venueId;
         this.name = name;
         this.address = address;
@@ -25,6 +24,13 @@ public class Venue {
         this.email = email;
         this.number = number;
         this.venueType= "Wedding"; //venueType;
+    }
+    public Venue(String name, String address, String occupancy, String email, String number){
+        this.name = name;
+        this.address = address;
+        this.occupancy = occupancy;
+        this.email = email;
+        this.number = number;
     }
 
     // Getter and setter methods for all fields

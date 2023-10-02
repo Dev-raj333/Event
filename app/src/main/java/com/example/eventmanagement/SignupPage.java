@@ -23,21 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class SignupPage extends AppCompatActivity {
 
     TextView exacc;
     EditText name,address,email,phone,pw;
-
-
     Button signup;
-
-
-
+    MyDbHelper myDbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,43 +41,29 @@ public class SignupPage extends AppCompatActivity {
         pw=findViewById(R.id.editTextPassword);
 
         signup=findViewById(R.id.buttonSignup);
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
+        myDbHelper = new MyDbHelper(this);
 
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String username = name.getText().toString();
+                String emails = email.getText().toString();
+                String password = pw.getText().toString();
+                String userAddress = address.getText().toString();
+                String contact = phone.getText().toString();
+
                 if(valid()){
                     //user registration
-                    firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(),pw.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            FirebaseUser user=firebaseAuth.getCurrentUser();
-                            Toast.makeText(SignupPage.this,"User Registration Successful",Toast.LENGTH_SHORT).show();
-                            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-                            DatabaseReference userRef = usersRef.child(user.getUid());
-
-                            userRef.child("Username").setValue(name.getText().toString());
-                            userRef.child("Address").setValue(address.getText().toString());
-                            userRef.child("UserEmail").setValue(email.getText().toString());
-                            userRef.child("PhoneNumber").setValue(phone.getText().toString());
-                            userRef.child("Password").setValue(pw.getText().toString());
-
-                            //specify if the user is admin
+                    myDbHelper.insertUser(username,emails,password,userAddress,contact);
+                    Toast.makeText(getApplicationContext(),"Successfully added",Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(SignupPage.this,FirstPage.class);
+                    startActivity(i);
 
 
+                }else {
+                    Toast.makeText(SignupPage.this,"User Registration Unsuccessful \n", Toast.LENGTH_SHORT).show();
 
-                            Intent i = new Intent(SignupPage.this,FirstPage.class);
-                            startActivity(i);
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(SignupPage.this,"User Registration Unsuccessful \n"+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
                 }
             }
 

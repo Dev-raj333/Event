@@ -1,34 +1,24 @@
 package com.example.eventmanagement;
 
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class AdminAddvenuedetails extends AppCompatActivity {
 
     private EditText nameEditText, addressEditText, occupancyEditText, emailEditText, numberEditText;
     private Button saveButton;
 
+    MyDbHelper database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addvenuedetailsadmin);
-
-        // Initialize Firebase
-        FirebaseApp.initializeApp(this);
-        DatabaseReference venueRef = FirebaseDatabase.getInstance().getReference("addvenue");
 
         nameEditText = findViewById(R.id.add_name);
         addressEditText = findViewById(R.id.add_address);
@@ -40,85 +30,37 @@ public class AdminAddvenuedetails extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveVenue(venueRef);
+                String name = nameEditText.getText().toString();
+                String address = addressEditText.getText().toString();
+                String occupancy = occupancyEditText.getText().toString();
+                String email = emailEditText.getText().toString();
+                String number = numberEditText.getText().toString();
+
+                if(name.isEmpty() || address.isEmpty() || occupancy.isEmpty() || email.isEmpty() || number.isEmpty()){
+                    Toast.makeText(AdminAddvenuedetails.this,"Please fill up the field", Toast.LENGTH_SHORT).show();
+                }else{
+                    Venue venue = new Venue(name,address, occupancy, email, number);
+                    long rowID = database.insertVenue(venue);
+                    if(rowID != -1){
+                        Toast.makeText(AdminAddvenuedetails.this,"Data inserted sucessfully",Toast.LENGTH_SHORT).show();
+                        clearInputs();
+                    }else {
+                        Toast.makeText(AdminAddvenuedetails.this,"Error inserting data", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
+
     }
-
-    private void saveVenue(DatabaseReference venueRef) {
-        String name = nameEditText.getText().toString().trim();
-        String address = addressEditText.getText().toString().trim();
-        String occupancy = occupancyEditText.getText().toString().trim();
-        String email = emailEditText.getText().toString().trim();
-        String number = numberEditText.getText().toString().trim();
-
-        String venueId = venueRef.push().getKey(); // Generate a new venueId
-        Venue venue = new Venue(venueId, name, address, occupancy, email, number); // Include venueId
-
-        if (venueId != null) {
-            venueRef.child(venueId).setValue(venue)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // Data saved successfully, show a toast message
-                            Toast.makeText(AdminAddvenuedetails.this, "Venue details saved successfully", Toast.LENGTH_SHORT).show();
-
-                            // Clear input fields after saving
-                            nameEditText.setText("");
-                            addressEditText.setText("");
-                            occupancyEditText.setText("");
-                            emailEditText.setText("");
-                            numberEditText.setText("");
-
-                            // Open AdminViewvenuedetails activity and pass the venueId
-                            Intent intent = new Intent(AdminAddvenuedetails.this, AdminViewvenuedetails.class);
-                            intent.putExtra("venueId", venueId);
-                            startActivity(intent);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Failed to save data, show a toast message
-                            Toast.makeText(AdminAddvenuedetails.this, "Failed to save venue details", Toast.LENGTH_SHORT).show();
-                            Log.e("Failed to save data", e.toString());
-                        }
-                    });
-
-        }
-    }
-    private boolean validateInput() {
-        String name = nameEditText.getText().toString().trim();
-        String address = addressEditText.getText().toString().trim();
-        String occupancy = occupancyEditText.getText().toString().trim();
-        String email = emailEditText.getText().toString().trim();
-        String number = numberEditText.getText().toString().trim();
-
-        if (name.isEmpty()) {
-            nameEditText.setError("Name is required");
-            return false;
-        }
-
-        if (address.isEmpty()) {
-            addressEditText.setError("Address is required");
-            return false;
-        }
-
-        if (occupancy.isEmpty()) {
-            occupancyEditText.setError("Occupancy is required");
-            return false;
-        }
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailEditText.setError("Enter a valid email address");
-            return false;
-        }
-
-        if (number.isEmpty() || !android.util.Patterns.PHONE.matcher(number).matches()) {
-            numberEditText.setError("Enter a valid phone number");
-            return false;
-        }
-        return true;
+    private void clearInputs() {
+        nameEditText.setText("");
+        addressEditText.setText("");
+        occupancyEditText.setText("");
+        emailEditText.setText("");
+        numberEditText.setText("");
     }
 }
+
+
+
 

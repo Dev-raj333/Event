@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,36 +13,33 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class FirstPage extends AppCompatActivity {
     Button signup,login;
     TextView fpw;
     EditText email,password;
-    FirebaseAuth auth;
 
-    private static final String ADMIN_EMAIL="admin@gmail.com";
-    private static final String ADMIN_PASSWORD="admin123";
+    MyDbHelper myDbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_page);
-        auth=FirebaseAuth.getInstance();
         email=findViewById(R.id.email);
         password=findViewById(R.id.password);
 
         login=findViewById(R.id.btnLogin);
         signup=findViewById(R.id.btnSignup);
         fpw=findViewById(R.id.forgotpw);
+        myDbHelper = new MyDbHelper(this);
 
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                SQLiteDatabase db= myDbHelper.getWritableDatabase();
                 Intent i=new Intent(FirstPage.this,SignupPage.class);
                 startActivity(i);
 
@@ -55,33 +53,18 @@ public class FirstPage extends AppCompatActivity {
                     String enteredEmail = email.getText().toString();
                     String enteredPassword = password.getText().toString();
 
-                    if (enteredEmail.equals(ADMIN_EMAIL) && enteredPassword.equals(ADMIN_PASSWORD)) {
+                    if (enteredEmail.equals("admin@gmail.com") && enteredPassword.equals("123456")) {
                         Toast.makeText(FirstPage.this, "Admin Login Successful", Toast.LENGTH_SHORT).show();
 
                         Intent i = new Intent(FirstPage.this, AdminActivity.class);
                         startActivity(i);
-                    } else {
+                    } else if(myDbHelper.checkUsernamePassword(enteredEmail, enteredPassword)) {
+                        Toast.makeText(FirstPage.this, "User Login Successful", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(FirstPage.this, UserActivity.class);
+                        startActivity(i);
 
-
-                        auth.signInWithEmailAndPassword(enteredEmail,enteredPassword)
-                             .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-
-                                Toast.makeText(FirstPage.this, "User Login Successful", Toast.LENGTH_SHORT).show();
-
-
-                                Intent i = new Intent(FirstPage.this, UserActivity.class);
-                                startActivity(i);
-                            }
-
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(FirstPage.this, "User login failure", Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
+                    }else{
+                        Toast.makeText(FirstPage.this, "User login failure", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

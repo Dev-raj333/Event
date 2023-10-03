@@ -53,16 +53,14 @@ public class FirstPage extends AppCompatActivity {
                     String enteredEmail = email.getText().toString();
                     String enteredPassword = password.getText().toString();
 
-                    if (enteredEmail.equals("admin@gmail.com") && enteredPassword.equals("123456")) {
+                    if (myDbHelper.checkAdmin(enteredEmail, enteredPassword)) {
                         Toast.makeText(FirstPage.this, "Admin Login Successful", Toast.LENGTH_SHORT).show();
-
                         Intent i = new Intent(FirstPage.this, AdminActivity.class);
                         startActivity(i);
                     } else if(myDbHelper.checkUsernamePassword(enteredEmail, enteredPassword)) {
                         Toast.makeText(FirstPage.this, "User Login Successful", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(FirstPage.this, UserActivity.class);
                         startActivity(i);
-
                     }else{
                         Toast.makeText(FirstPage.this, "User login failure", Toast.LENGTH_SHORT).show();
                     }
@@ -78,7 +76,6 @@ public class FirstPage extends AppCompatActivity {
                     password.setError("Password cannot be empty");
                     validation=false;
                 }
-
                 return validation;
             }
        });
@@ -90,7 +87,5 @@ public class FirstPage extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
    }
 }

@@ -7,42 +7,31 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class CustomVenueAdaptor extends ArrayAdapter<Venue> {
-    private List<Venue> venueList;
-    private TextView nameTextView, addressTextView, occupancyTextView, emailTextView, numberTextView;
-    public CustomVenueAdaptor(@NonNull Context context, List<Venue> venueList) {
-        super(context, 0, venueList);
-        this.venueList = venueList;
+    public CustomVenueAdaptor(Context context, ArrayList<Venue> venues){
+        super(context, R.layout.venueview, venues);
     }
 
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_admin_viewvenuedetails, parent, false);
-        }
+    public View getView(int position, View convertView, ViewGroup parent){
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View view = inflater.inflate(R.layout.venueview, parent,false);
 
-        final Venue venue = getItem(position);
+        TextView name = view.findViewById(R.id.view_name);
+        TextView address = view.findViewById(R.id.view_address);
+        TextView occupancy = view.findViewById(R.id.view_occupancy);
+        TextView email = view.findViewById(R.id.view_email);
+        TextView number = view.findViewById(R.id.view_number);
 
-        if(venue !=null){
-            nameTextView = convertView.findViewById(R.id.view_name);
-            addressTextView = convertView.findViewById(R.id.view_address);
-            occupancyTextView = convertView.findViewById(R.id.view_occupancy);
-            emailTextView = convertView.findViewById(R.id.view_email);
-            numberTextView = convertView.findViewById(R.id.view_number);
+        Venue venueItems = getItem(position);
+        name.setText(venueItems.getName());
+        address.setText(venueItems.getAddress());
+        occupancy.setText(venueItems.getOccupancy());
+        email.setText(venueItems.getEmail());
+        number.setText(venueItems.getNumber());
 
-            nameTextView.setText("Name: " + venue.getName());
-            addressTextView.setText("Address: " + venue.getAddress());
-            occupancyTextView.setText("Occupancy: " + venue.getOccupancy());
-            emailTextView.setText("Email: " + venue.getEmail());
-            numberTextView.setText("Number: " + venue.getNumber());
-        }
-
-        return convertView;
+        return view;
     }
 }

@@ -13,20 +13,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 public class UserThirdActivity extends AppCompatActivity {
     private LinearLayout servicesLayout;
     private Button saveButton;
     private String selectedServices = "";
-    private DatabaseReference eventsRef;
-    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +25,6 @@ public class UserThirdActivity extends AppCompatActivity {
         servicesLayout = findViewById(R.id.servicesLayout);
         saveButton = findViewById(R.id.btnsave);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        eventsRef = FirebaseDatabase.getInstance().getReference().child("Events");
 
         View.OnClickListener serviceClickListener = new View.OnClickListener() {
             @Override
@@ -68,10 +56,7 @@ public class UserThirdActivity extends AppCompatActivity {
                 if (selectedServices.length() > 0) {
                     selectedServices = selectedServices.substring(0, selectedServices.length() - 2);
                 }
-
-                // Save the selected services to the database
-                saveSelectedServicesToDatabase();
-            }
+           }
         });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -89,41 +74,5 @@ public class UserThirdActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void saveSelectedServicesToDatabase() {
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
-
-            if (selectedServices.isEmpty()) {
-                showToast("Please select at least one service.");
-                return; // Exit the method without saving data
-            }
-
-
-            Event event = new Event();
-            event.setSelectedHotel(selectedServices);
-
-            eventsRef.child(userId).child("selectedServices").setValue(selectedServices)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // Data saved successfully, show toast message
-                            showToast("Data saved successfully!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Data failed to save, show an error message if needed
-                            showToast("Error saving data. Please try again.");
-                        }
-                    });
-        }
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(UserThirdActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

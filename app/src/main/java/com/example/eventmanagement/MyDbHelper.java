@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 public class MyDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION =2;
@@ -15,9 +16,11 @@ public class MyDbHelper extends SQLiteOpenHelper {
     private static final String Table3 = "Venue";
     private static final String Table4 = "Rating";
     private static final String Table5 = "Event";
+    private final Context context;
 
     public MyDbHelper(Context context){
         super(context,name,null, DATABASE_VERSION);
+        this.context = context;
     }
 
 
@@ -26,7 +29,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
         String table1 = "CREATE TABLE " + Table1 + "(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT)";
         String table2 = "CREATE TABLE " + Table2 + "(uid INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT, address TEXT, phoneNumber TEXT)";
         String table3 = "CREATE TABLE " + Table3 + "(vid INTEGER PRIMARY KEY AUTOINCREMENT, venueName TEXT, venueAddress TEXT, occupancy TEXT, email TEXT, phoneNumber TEXT)";
-        String table4 = "CREATE TABLE " + Table4 + "(rid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, vid INTEGER, rating INTEGER, FOREIGN KEY(uid) REFERENCES User(uid),FOREIGN KEY(vid) REFERENCES Venue(vid))";
+        String table4 = "CREATE TABLE " + Table4 + "(rid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, vid INTEGER, rating INTEGER, feedback TEXT, FOREIGN KEY(uid) REFERENCES User(uid),FOREIGN KEY(vid) REFERENCES Venue(vid))";
         String table5 = "CREATE TABLE " + Table5 + "(eid INTEGER PRIMARY KEY AUTOINCREMENT, eventName TEXT, noGuest INTEGER, entryDate TEXT, exitDate TEXT, uid INTEGER, vid INTEGER, FOREIGN KEY(uid) REFERENCES User(uid),FOREIGN KEY(vid) REFERENCES Venue(vid))";
         db.execSQL(table1);
         db.execSQL(table2);
@@ -45,7 +48,6 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
     }
 
-
     //Users db
     public void insertUser(String username, String email, String password, String address, String phoneNumber){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -56,7 +58,12 @@ public class MyDbHelper extends SQLiteOpenHelper {
         contentValues.put("address", address);
         contentValues.put("phoneNumber", phoneNumber);
 
-        db.insert("User", null, contentValues);
+        long result = db.insert("User", null, contentValues);
+        if(result == -1){
+            Toast.makeText(context,"Error Occurred",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context,"Successfully account created",Toast.LENGTH_SHORT).show();
+        }
         db.close();
     }
     public  Cursor selectUser(){
@@ -204,6 +211,27 @@ public class MyDbHelper extends SQLiteOpenHelper {
         contentValues.put("password","123456");
 
         db.insert("Admin", null, contentValues);
+    }
+    public Cursor getAdmin(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM Admin";
+        Cursor cursor = db.rawQuery(query,null);
+        return cursor;
+    }
+    public boolean checkAdmin(String username,String password){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query="SELECT * from Admin where email =? and password= ?";
+        Cursor cursor = db.rawQuery(query,new String[]{username, password});
+        if(cursor.getCount()> 0){
+            return  true;
+        }else{
+            return false;
+        }
+    }
+    public void deleteAdmin(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Admin","id=?", new String[]{String.valueOf(id)});
+        db.close();
     }
 
 }

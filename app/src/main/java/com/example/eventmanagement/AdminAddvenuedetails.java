@@ -19,7 +19,7 @@ public class AdminAddvenuedetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addvenuedetailsadmin);
-
+        database = new MyDbHelper(this);
         nameEditText = findViewById(R.id.add_name);
         addressEditText = findViewById(R.id.add_address);
         occupancyEditText = findViewById(R.id.add_occupancy);

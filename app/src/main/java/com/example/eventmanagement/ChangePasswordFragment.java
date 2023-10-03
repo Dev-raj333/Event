@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class ChangePasswordFragment extends Fragment {
 
@@ -71,16 +70,5 @@ public class ChangePasswordFragment extends Fragment {
     private void changePassword() {
         String newPassword = editTextNewPassword.getText().toString();
 
-        FirebaseAuth.getInstance().getCurrentUser().updatePassword(newPassword)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Password changed successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Password change failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 }

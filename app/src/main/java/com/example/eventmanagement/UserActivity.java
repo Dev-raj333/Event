@@ -19,11 +19,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 public class UserActivity extends AppCompatActivity {
 
 
@@ -36,8 +31,6 @@ public class UserActivity extends AppCompatActivity {
     CardView cv1, cv2, cv3, cv4, cv5, cv6;
 
     private String selectEvent;
-    private DatabaseReference userRef;
-    private FirebaseAuth firebaseAuth;
 
 
     private void replaceFragment(Fragment fragment) {
@@ -55,10 +48,6 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-
-        firebaseAuth = FirebaseAuth.getInstance();
-
-
         cv1 = findViewById(R.id.card1);
         cv2 = findViewById(R.id.card2);
         cv3 = findViewById(R.id.card3);
@@ -66,7 +55,6 @@ public class UserActivity extends AppCompatActivity {
         cv5 = findViewById(R.id.card5);
         cv6 = findViewById(R.id.card6);
 
-        userRef = FirebaseDatabase.getInstance().getReference().child("Events");
 
 
         cv1.setOnClickListener(new View.OnClickListener() {
@@ -217,17 +205,6 @@ public class UserActivity extends AppCompatActivity {
 
 
     private void saveSelectedEventToDatabase() {
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
 
-            // Create a User object with the selected event
-            Event event = new Event();
-            event.setSelectedEvent(selectEvent);
-            // Set other user properties...
-
-            // Save the user data to the database under the user's ID
-//            userRef.child(userId).setValue(event);
-        }
     }
 }

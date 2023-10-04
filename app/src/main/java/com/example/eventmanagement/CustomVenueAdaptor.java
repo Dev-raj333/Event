@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomVenueAdaptor extends ArrayAdapter<Venue> {
-    public CustomVenueAdaptor(Context context, ArrayList<Venue> venues){
+    public CustomVenueAdaptor(Context context, int activity_admin_viewvenuedetails, List<Venue> venues){
         super(context, R.layout.venueview, venues);
     }
 
@@ -26,11 +27,11 @@ public class CustomVenueAdaptor extends ArrayAdapter<Venue> {
         TextView number = view.findViewById(R.id.view_number);
 
         Venue venueItems = getItem(position);
-        name.setText(venueItems.getName());
-        address.setText(venueItems.getAddress());
-        occupancy.setText(venueItems.getOccupancy());
-        email.setText(venueItems.getEmail());
-        number.setText(venueItems.getNumber());
+        name.setText("Name: "+venueItems.getName());
+        address.setText("Address: " +venueItems.getAddress());
+        occupancy.setText("Occupancy: " +venueItems.getOccupancy());
+        email.setText("Email: "+venueItems.getEmail());
+        number.setText("Contact No: " +venueItems.getNumber());
 
         return view;
     }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="124dp"
+        android:layout_height="108dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/hotel1" />
+
+    <TextView
+        android:id="@+id/hoteltext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hotel Pabera"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_toEndOf="@+id/imageView"
+        android:layout_marginStart="40sp"
+        android:layout_marginTop="20sp"
+        />
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Budhanilkantha"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@id/imageView"
+        android:layout_below="@id/hoteltext"
+        android:layout_marginStart="40sp"
+        />
+
+</RelativeLayout>

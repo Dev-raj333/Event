@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class MyDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION =2;
     private static final String name= "EventManagement";
@@ -127,6 +131,28 @@ public class MyDbHelper extends SQLiteOpenHelper {
         long rowId = db.insert("Venue", null, contentValues);
         db.close();
         return rowId;
+    }
+    public List<Venue> getAllVenues() {
+        List<Venue> venueList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM Venue";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Venue venue = new Venue(
+                        cursor.getString(1), // venueName
+                        cursor.getString(2), // address
+                        cursor.getString(3),    // occupancy
+                        cursor.getString(4), // email
+                        cursor.getString(5)  // phoneNumber
+                );
+                venueList.add(venue);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return venueList;
     }
     public  Cursor selectVenue(){
         SQLiteDatabase db = this.getReadableDatabase();

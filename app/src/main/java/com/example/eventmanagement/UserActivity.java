@@ -12,13 +12,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserActivity extends AppCompatActivity {
 
 
@@ -47,6 +54,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        MyDbHelper myDbHelper= new MyDbHelper(this);
 
         cv1 = findViewById(R.id.card1);
         cv2 = findViewById(R.id.card2);
@@ -55,16 +63,42 @@ public class UserActivity extends AppCompatActivity {
         cv5 = findViewById(R.id.card5);
         cv6 = findViewById(R.id.card6);
 
+        Cursor cursor = myDbHelper.selectUser();
+        List<User> userList = new ArrayList<>();
+        if(cursor.moveToNext()){
+            do{
+                @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex("uid"));
+                Log.d("Id", id);
+                @SuppressLint("Range") String username = cursor.getString(cursor.getColumnIndex("username"));
+                @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex("email"));
+                @SuppressLint("Range") String password = cursor.getString(cursor.getColumnIndex("password"));
+                @SuppressLint("Range") String address = cursor.getString(cursor.getColumnIndex("address"));
+                @SuppressLint("Range") String phoneNumber = cursor.getString(cursor.getColumnIndex("phoneNumber"));
+
+                User user = new User(id, username, email, password, address, phoneNumber);
+                userList.add(user);
+            }while (cursor.moveToNext());
+        }
+        String username = getIntent().getStringExtra("username");
+
+
 
 
         cv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectEvent = "Wedding";
-                saveSelectedEventToDatabase();
+                String id = null;
+                for (User user : userList) {
+                    if (user.getEmail().equals(username)) {
+                        id = user.getUserId();
+                    }
+                }
 
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
+                i.putExtra("uid", id);
+
                 startActivity(i);
             }
         });
@@ -73,7 +107,6 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Anniversary";
-                saveSelectedEventToDatabase();
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
@@ -85,7 +118,6 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Birthday";
-                saveSelectedEventToDatabase();
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
@@ -106,7 +138,6 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Meeting";
-                saveSelectedEventToDatabase();
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
@@ -117,7 +148,6 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Graduation";
-                saveSelectedEventToDatabase();
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
                 startActivity(i);
@@ -201,10 +231,5 @@ public class UserActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         adt.syncState();
-    }
-
-
-    private void saveSelectedEventToDatabase() {
-
     }
 }

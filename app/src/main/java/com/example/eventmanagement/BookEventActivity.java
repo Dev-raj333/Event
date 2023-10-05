@@ -39,6 +39,7 @@ public class BookEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_event);
 
+        ;
 
 
         //find view by their ids

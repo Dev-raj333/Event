@@ -1,36 +1,30 @@
 package com.example.eventmanagement;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import java.io.Serializable;
 
-import androidx.fragment.app.Fragment;
-
-public class User {
+public class User implements Serializable {
     private String userId;
     private String username;
     private String address;
     private String email;
-    private String phoneno;
+    private String phoneNumber;
     private String password;
 
 
-    public User() {
+    public User(String string, String cursorString, String s, String string1, String cursorString1) {
         // Required empty constructor for Firebase
     }
 
-    public User(String userId, String username, String address, String email, String phoneno, String password) {
+    public User(String userId, String username, String email, String password, String address, String phoneNumber) {
         this.userId = userId;
         this.username = username;
         this.address = address;
         this.email = email;
-        this.phoneno = phoneno;
+        this.phoneNumber = phoneNumber;
         this.password = password;
 
     }
+
 
     public String getUserId() {
         return userId;
@@ -60,12 +54,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPhoneno() {
-        return phoneno;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhoneno(String phoneno) {
-        this.phoneno = phoneno;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getPassword() {

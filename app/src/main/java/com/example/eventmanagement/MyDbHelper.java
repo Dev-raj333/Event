@@ -1,5 +1,6 @@
 package com.example.eventmanagement;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -71,8 +72,9 @@ public class MyDbHelper extends SQLiteOpenHelper {
         db.close();
     }
     public  Cursor selectUser(){
+        List<User> userList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM User";
+        String query="SELECT * from User";
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }

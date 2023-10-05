@@ -34,7 +34,6 @@ public class FirstPage extends AppCompatActivity {
         fpw=findViewById(R.id.forgotpw);
         myDbHelper = new MyDbHelper(this);
 
-
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,10 +55,12 @@ public class FirstPage extends AppCompatActivity {
                     if (myDbHelper.checkAdmin(enteredEmail, enteredPassword)) {
                         Toast.makeText(FirstPage.this, "Admin Login Successful", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(FirstPage.this, AdminActivity.class);
+                        i.putExtra("username", enteredEmail);
                         startActivity(i);
                     } else if(myDbHelper.checkUsernamePassword(enteredEmail, enteredPassword)) {
                         Toast.makeText(FirstPage.this, "User Login Successful", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(FirstPage.this, UserActivity.class);
+                        i.putExtra("username", enteredEmail);
                         startActivity(i);
                     }else{
                         Toast.makeText(FirstPage.this, "User login failure", Toast.LENGTH_SHORT).show();

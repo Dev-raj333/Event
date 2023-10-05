@@ -12,16 +12,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerVenueAdapter extends RecyclerView.Adapter<RecyclerVenueAdapter.ViewHolder> {
+    private String uid;
     private List<Venue> venueList;
 
     private Context context;
     private String eventName;
-    public RecyclerVenueAdapter(List<Venue> venueList, String eventName, Context context){
+    public RecyclerVenueAdapter(List<Venue> venueList, String eventName,String uid, Context context){
         this.venueList= venueList;
         this.eventName = eventName;
+        this.uid = uid;
         this.context = context;
     }
     @NonNull
@@ -29,7 +32,6 @@ public class RecyclerVenueAdapter extends RecyclerView.Adapter<RecyclerVenueAdap
     public RecyclerVenueAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.recycle_venue_item,parent,false);
         ViewHolder viewHolder = new ViewHolder(view);
-        viewHolder.itemView.setTag(eventName);
         return viewHolder;
     }
 
@@ -45,7 +47,7 @@ public class RecyclerVenueAdapter extends RecyclerView.Adapter<RecyclerVenueAdap
         return venueList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView hotelName, address;
         ImageView imageView;
         private Context context;
@@ -61,15 +63,17 @@ public class RecyclerVenueAdapter extends RecyclerView.Adapter<RecyclerVenueAdap
                     int position = getAdapterPosition();
                     if(position != RecyclerView.NO_POSITION){
                         String selectHotel = hotelName.getText().toString();
-                        System.out.println(selectHotel);
-                        String selectEvent = (String) itemView.getTag();
-                        Log.d("Clicked data is ", selectHotel);
+                        Venue selectedVenue = venueList.get(position);
+                        String vid = selectedVenue.getVenueId();
+                        Log.d("Clicked data is ", vid);
+                        Log.d("Clicked data is ", eventName);
                         Intent i = new Intent(context, BookEventActivity.class );
-                        i.putExtra("selected_hotel", selectHotel);
-                        i.putExtra("selected_event", selectEvent);
+                        i.putExtra("vId",vid);
+                        i.putExtra("selected_event", eventName);
+                        i.putExtra("uid", uid);
                         context.startActivity(i);
                     }
-                }
+                 }
             });
         }
     }

@@ -23,9 +23,8 @@ public class Venue {
         this.occupancy = occupancy;
         this.email = email;
         this.number = number;
-        this.venueType= "Wedding"; //venueType;
     }
-    public Venue(String name, String address, String occupancy, String email, String number){
+    public Venue( String name, String address, String occupancy, String email, String number){
         this.name = name;
         this.address = address;
         this.occupancy = occupancy;

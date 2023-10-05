@@ -43,7 +43,7 @@ public class CustomEventAdapter extends ArrayAdapter<Event> {
             }
 
             if (eventHotelTextView != null) {
-                eventHotelTextView.setText(event.getSelectedHotel());
+                eventHotelTextView.setText(event.getEventName());
             }
             if (eventServiceTextView != null) {
                 eventServiceTextView.setText(event.getSelectedServices());
@@ -56,17 +56,17 @@ public class CustomEventAdapter extends ArrayAdapter<Event> {
             }
 
             // Assuming the User class has a getEmail() method
-            Event.User user = event.getUser(); // Get the User associated with this Event
-
-            if (user != null) {
-                String userEmail = user.getEmail();
-                // Display the user's email in a TextView (replace 'userEmailTextView' with your actual TextView)
-                TextView userEmailTextView = convertView.findViewById(R.id.userEmailTextView);
-                if (userEmailTextView != null) {
-                    userEmailTextView.setText("User Email: " + userEmail);
-                }
-            }
-
+//            Event.User user = event.getUser(); // Get the User associated with this Event
+//
+//            if (user != null) {
+//                String userEmail = user.getEmail();
+//                // Display the user's email in a TextView (replace 'userEmailTextView' with your actual TextView)
+//                TextView userEmailTextView = convertView.findViewById(R.id.userEmailTextView);
+//                if (userEmailTextView != null) {
+//                    userEmailTextView.setText("User Email: " + userEmail);
+//                }
+//            }
+//
 
 
 //        if (event != null) {

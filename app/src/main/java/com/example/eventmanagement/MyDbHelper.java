@@ -143,6 +143,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Venue venue = new Venue(
+                        cursor.getString(0), //vid
                         cursor.getString(1), // venueName
                         cursor.getString(2), // address
                         cursor.getString(3),    // occupancy
@@ -181,7 +182,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
         db.delete("Venue","vid=?",new String[]{vid});
     }
     //Event
-    public void insertEvent(int eid ,String eventName, int noGuest,String entryDate,String exitDate, int uid,int vid){
+    public void insertEvent(String eventName, String noGuest,String entryDate,String exitDate, String uid,String vid){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("eventName", eventName);

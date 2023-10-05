@@ -55,6 +55,9 @@ public class UserThirdActivity extends AppCompatActivity {
                 // Remove the trailing comma and space
                 if (selectedServices.length() > 0) {
                     selectedServices = selectedServices.substring(0, selectedServices.length() - 2);
+                    Intent i = new Intent(UserThirdActivity.this, UserActivity.class);
+                    startActivity(i);
+
                 }
            }
         });

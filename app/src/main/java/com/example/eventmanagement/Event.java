@@ -1,80 +1,38 @@
 package com.example.eventmanagement;
 
-
-
 public class Event {
-    private String selectedEvent;
+    private String eId;
     private String selectedServices;
-    private String selectedHotel;
-   // private String eventId;
+    private String uid;
     private String eventName;
     private String numberOfGuests;
     private String entryDate;
     private String exitDate;
-    private User user;
+    private String vId;
 
 
-
-    // Required empty constructor for Firebase
-    public Event() {
-
-    }
-
-    public Event(String selectedEvent, String selectedServices, String selectedHotel, String eventName, String numberOfGuests, String entryDate, String exitDate) {
-        this.selectedEvent = selectedEvent;
+    public Event(String eId, String selectedServices, String uid, String eventName, String numberOfGuests, String entryDate, String exitDate, String vId) {
+        this.eId = eId;
         this.selectedServices = selectedServices;
-        this.selectedHotel = selectedHotel;
-     //   this.eventId = eventId;
+        this.uid = uid;
         this.eventName = eventName;
         this.numberOfGuests = numberOfGuests;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
-        this.user = user;
-
-
-
+        this.vId = vId;
     }
 
-//    public Event(String eventId, String eventName, String numberOfGuests, String entryDate, String exitDate) {
-//        this.eventId = eventId;
-//        this.eventName = eventName;
-//        this.numberOfGuests = numberOfGuests;
-//        this.entryDate = entryDate;
-//        this.exitDate = exitDate;
-//
-//    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getSelectedEvent() {
-        return selectedEvent;
-    }
-
-    public void setSelectedEvent(String selectedEvent) {
-        this.selectedEvent = selectedEvent;
+    public String geteId() {
+        return eId;
     }
 
     public String getSelectedServices() {
         return selectedServices;
     }
 
-    public void setSelectedServices(String selectedServices) {
-        this.selectedServices = selectedServices;
+    public String getUid() {
+        return uid;
     }
-
-    public String getSelectedHotel() {
-        return selectedHotel;
-    }
-
-    public void setSelectedHotel(String selectedHotel) {
-        this.selectedHotel = selectedHotel;
-    }
-
-  //  public String getEventId() {
-  //      return eventId;
-  //  }
 
     public String getEventName() {
         return eventName;
@@ -92,19 +50,40 @@ public class Event {
         return exitDate;
     }
 
-    public class User {
-        public String email;
-
-        // Constructor
-        public User(String email) {
-            this.email = email;
-        }
-
-        // Getter for email
-        public String getEmail() {
-            return email;
-        }
+    public String getvId() {
+        return vId;
     }
 
+    public void seteId(String eId) {
+        this.eId = eId;
+    }
+
+    public void setSelectedServices(String selectedServices) {
+        this.selectedServices = selectedServices;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    public void setNumberOfGuests(String numberOfGuests) {
+        this.numberOfGuests = numberOfGuests;
+    }
+
+    public void setEntryDate(String entryDate) {
+        this.entryDate = entryDate;
+    }
+
+    public void setExitDate(String exitDate) {
+        this.exitDate = exitDate;
+    }
+
+    public void setvId(String vId) {
+        this.vId = vId;
+    }
 }
 

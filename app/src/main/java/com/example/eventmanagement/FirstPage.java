@@ -33,7 +33,7 @@ public class FirstPage extends AppCompatActivity {
         signup=findViewById(R.id.btnSignup);
         fpw=findViewById(R.id.forgotpw);
         myDbHelper = new MyDbHelper(this);
-
+        myDbHelper.insertAdmin();
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

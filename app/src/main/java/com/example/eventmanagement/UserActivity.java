@@ -40,8 +40,11 @@ public class UserActivity extends AppCompatActivity {
     private String selectEvent;
 
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment, String userId) {
         fl.setVisibility(View.VISIBLE);
+        Bundle bundle = new Bundle();
+        bundle.putString("userId",userId);
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.framelayout, fragment);
@@ -81,9 +84,6 @@ public class UserActivity extends AppCompatActivity {
         }
         String username = getIntent().getStringExtra("username");
 
-
-
-
         cv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,10 +107,17 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Anniversary";
+                String id = null;
+                for (User user : userList) {
+                    if (user.getEmail().equals(username)) {
+                        id = user.getUserId();
+                    }
+                }
+
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
+                i.putExtra("uid", id);
                 startActivity(i);
-
             }
         });
 
@@ -118,8 +125,16 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Birthday";
+                String id = null;
+                for (User user : userList) {
+                    if (user.getEmail().equals(username)) {
+                        id = user.getUserId();
+                    }
+                }
+
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
+                i.putExtra("uid", id);
                 startActivity(i);
             }
         });
@@ -128,8 +143,16 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "BachelorParty";
+                String id = null;
+                for (User user : userList) {
+                    if (user.getEmail().equals(username)) {
+                        id = user.getUserId();
+                    }
+                }
+
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
+                i.putExtra("uid", id);
                 startActivity(i);
             }
         });
@@ -138,8 +161,16 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Meeting";
+                String id = null;
+                for (User user : userList) {
+                    if (user.getEmail().equals(username)) {
+                        id = user.getUserId();
+                    }
+                }
+
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
+                i.putExtra("uid", id);
                 startActivity(i);
             }
         });
@@ -148,66 +179,64 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Graduation";
+                String id = null;
+                for (User user : userList) {
+                    if (user.getEmail().equals(username)) {
+                        id = user.getUserId();
+                    }
+                }
                 Intent i = new Intent(UserActivity.this, UserSecondActivity.class);
                 i.putExtra("selected_event", selectEvent);
+                i.putExtra("uid", id);
                 startActivity(i);
             }
         });
-
-
+        String uid = null;
+        for (User user : userList) {
+            if (user.getEmail().equals(username)) {
+                uid = user.getUserId();
+            }
+        }
+        Log.d("abc",uid);
         fl = findViewById(R.id.framelayout);
         nv = findViewById(R.id.navigation);
         dl = findViewById(R.id.drawerlayout);
         tb = findViewById(R.id.toolbar);
-        //ft = getSupportFragmentManager().beginTransaction();
-        //   ft.add(R.id.framelayout, new HomeFragment());
-        //    ft.commit();
 
         adt = new ActionBarDrawerToggle(UserActivity.this, dl, tb, R.string.open, R.string.close);
 
 
+        String finalUid = uid;
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-
                 int id = item.getItemId();
                 if (id == R.id.home) {
-//                    replaceFragment(new HomeFragment());
                     fl.setVisibility(View.GONE);
                 }
                 if (id == R.id.profile) {
 
-                    replaceFragment(new UserProfileFragment());
+                    replaceFragment(new UserProfileFragment(), finalUid);
                 }
 
 
                 if (id == R.id.details) {
-                    replaceFragment(new UserViewDetailsFragment());
-//                    ft = getSupportFragmentManager().beginTransaction();
-//                    ft.replace(R.id.framelayout, new UserViewDetailsFragment());
-//                    ft.commit();
+                    replaceFragment(new UserViewDetailsFragment(), finalUid);
                 }
 
                 if (id == R.id.changepw) {
-                    replaceFragment(new ChangePasswordFragment());
-//                    ft = getSupportFragmentManager().beginTransaction();
-//                    ft.replace(R.id.framelayout, new ChangePasswordFragment());
-//                    ft.commit();
+                    replaceFragment(new ChangePasswordFragment(),finalUid);
                 }
 
                 if (id == R.id.review) {
-                    replaceFragment(new ReviewFragment());
+                    replaceFragment(new ReviewFragment(),finalUid);
 
                 }
 
 
                 if (id == R.id.logout) {
-                    replaceFragment(new LogoutFragment());
-//                    ft = getSupportFragmentManager().beginTransaction();
-//                    ft.replace(R.id.framelayout, new LogoutFragment());
-//                    ft.commit();
-
+                    replaceFragment(new LogoutFragment(), finalUid);
                 }
                 dl.closeDrawers();
                 return false;

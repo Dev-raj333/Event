@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -32,17 +33,15 @@ public class BookEventActivity extends AppCompatActivity {
     ImageView entryDateImage, exitDateImage;
     Calendar calendar;
     SimpleDateFormat dateFormat;
-
+    MyDbHelper myDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_event);
 
-        ;
+        myDbHelper = new MyDbHelper(this);
 
-
-        //find view by their ids
         eventNameEditText = findViewById(R.id.eventtext);
         numberOfGuestsEditText = findViewById(R.id.eventtext1);
         entryDateEditText = findViewById(R.id.entryDateEditText);
@@ -50,6 +49,10 @@ public class BookEventActivity extends AppCompatActivity {
         next = findViewById(R.id.nextbutton);
         entryDateImage = findViewById(R.id.imgentry);
         exitDateImage = findViewById(R.id.imgexit);
+        String vId = getIntent().getStringExtra("vId");
+        String selectedEvent = getIntent().getStringExtra("selected_event");
+        String uId = getIntent().getStringExtra("uid");
+        eventNameEditText.setText(selectedEvent);
 
 
         calendar = Calendar.getInstance();
@@ -69,26 +72,14 @@ public class BookEventActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveEventData();
+                saveEventData(uId,vId);
                 Intent i = new Intent(BookEventActivity.this,UserThirdActivity.class);
                startActivity(i);
-
             }
         });
-
-
-//        next.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                saveEventData();
-//            }
-//        });
     }
 
     private void showDatePickerDialog(final EditText editText) {
@@ -99,9 +90,6 @@ public class BookEventActivity extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-
-
-
                         Calendar selectedCalendar = Calendar.getInstance();
                         selectedCalendar.set(year, month, dayOfMonth);
 
@@ -126,8 +114,9 @@ public class BookEventActivity extends AppCompatActivity {
     }
 
 
-    private void saveEventData() {
+    private void saveEventData(String uid, String vid) {
         String eventName = eventNameEditText.getText().toString().trim();
+
         String numberOfGuests = numberOfGuestsEditText.getText().toString().trim();
         String entryDate = entryDateEditText.getText().toString().trim();
         String exitDate = exitDateEditText.getText().toString().trim();
@@ -135,6 +124,8 @@ public class BookEventActivity extends AppCompatActivity {
         if (eventName.isEmpty() || numberOfGuests.isEmpty() || entryDate.isEmpty() || exitDate.isEmpty()) {
             Toast.makeText(BookEventActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
+        }else{
+            myDbHelper.insertEvent(eventName, numberOfGuests, entryDate,exitDate, uid, vid);
         }
     }
 

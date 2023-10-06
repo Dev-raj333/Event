@@ -213,10 +213,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
     }
     public List<Event> selectEvent(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM Event INNER JOIN User ON Event.uid = User.uid INNER JOIN Venue ON EVENT.vid = Venue.vid";
+        String query = "SELECT eventName, noGuest, entryDate,exitDate,service,venueName,eventStatus, username from Event INNER JOIN Venue ON Event.vid = Venue.vid INNER JOIN User ON Event.uid = User.uid";
         Cursor cursor = db.rawQuery(query, null);
         List<Event> list = new ArrayList<>();
-        if(cursor.moveToNext()){
+        if(cursor.moveToFirst()){
             do{
                 @SuppressLint("Range") String eventName = cursor.getString(cursor.getColumnIndex("eventName"));
                 @SuppressLint("Range") String noGuest = cursor.getString(cursor.getColumnIndex("noGuest"));
@@ -224,9 +224,9 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String userName = cursor.getString(cursor.getColumnIndex("username"));
                 @SuppressLint("Range") String entryDate = cursor.getString(cursor.getColumnIndex("entryDate"));
                 @SuppressLint("Range") String exitDate = cursor.getString(cursor.getColumnIndex("exitDate"));
-                @SuppressLint("Range") String eStatus = cursor.getString(cursor.getColumnIndex("status"));
+                @SuppressLint("Range") String eStatus = cursor.getString(cursor.getColumnIndex("eventStatus"));
                 @SuppressLint("Range") String selectService = cursor.getString(cursor.getColumnIndex("service"));
-                Event event = new Event(venueName, venueAddress, occupancy, email, phoneNumber);
+                Event event = new Event(eventName,noGuest,entryDate,exitDate,selectService,venueName, userName);
                 list.add(event);
             }while (cursor.moveToNext());
         }

@@ -33,26 +33,43 @@ public class CustomEventAdapter extends ArrayAdapter<Event> {
 
         if (event != null) {
             TextView eventNameTextView = convertView.findViewById(R.id.eventName);
-            TextView eventHotelTextView = convertView.findViewById(R.id.eventHotels);
+            TextView eventHotelTextView = convertView.findViewById(R.id.venueName);
             TextView eventServiceTextView = convertView.findViewById(R.id.eventService);
             TextView eventEntryDate = convertView.findViewById(R.id.eventEntryDate);
             TextView eventExitDate = convertView.findViewById(R.id.eventExitDate);
+            TextView noGuest = convertView.findViewById(R.id.noGuest);
+            TextView status = convertView.findViewById(R.id.status);
+            TextView username = convertView.findViewById(R.id.username);
+            if(event.getStatus()=="completed"){
+                eventNameTextView.setText("Empty pending event");
+            }else{
+                if (eventNameTextView != null) {
+                    eventNameTextView.setText("Event Name: " +event.getEventName());
+                }
 
-            if (eventNameTextView != null) {
-                eventNameTextView.setText(event.getEventName());
-            }
+                if (eventHotelTextView != null) {
+                    eventHotelTextView.setText("Venue Name: " +event.getVenueName());
+                }
+                if (eventServiceTextView != null) {
+                    eventServiceTextView.setText("Service Type: "+ event.getSelectedServices());
+                }
+                if (eventEntryDate != null) {
+                    eventEntryDate.setText("Entry Date: "+event.getEntryDate());
+                }
+                if (eventExitDate != null) {
+                    eventExitDate.setText("Exit Date: " +event.getExitDate());
+                }
+                if (noGuest != null) {
+                    noGuest.setText("No of Guest: " +event.getNumberOfGuests());
+                }
 
-            if (eventHotelTextView != null) {
-                eventHotelTextView.setText(event.getEventName());
-            }
-            if (eventServiceTextView != null) {
-                eventServiceTextView.setText(event.getSelectedServices());
-            }
-            if (eventEntryDate != null) {
-                eventEntryDate.setText(event.getEntryDate());
-            }
-            if (eventExitDate != null) {
-                eventExitDate.setText(event.getExitDate());
+                if (username != null) {
+                    status.setText("Status: " +event.getUsername());
+                }
+                if (status != null) {
+                    status.setText("Status: " +event.getStatus());
+                }
+
             }
 
         }

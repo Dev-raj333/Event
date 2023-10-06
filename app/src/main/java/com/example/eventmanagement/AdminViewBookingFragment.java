@@ -33,7 +33,9 @@ public class AdminViewBookingFragment extends Fragment {
 
         ListView listView = view.findViewById(R.id.adminlistview);
 
-
+        List<Event> eventList=myDbHelper.selectEvent();
+        customAdapter = new CustomEventAdapter(getContext(),eventList);
+        listView.setAdapter(customAdapter);
         return view;
     }
 }

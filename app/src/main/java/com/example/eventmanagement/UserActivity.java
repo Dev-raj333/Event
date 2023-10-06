@@ -178,6 +178,7 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectEvent = "Graduation";
+
                 String id = null;
                 for (User user : userList) {
                     if (user.getEmail().equals(username)) {
@@ -196,7 +197,6 @@ public class UserActivity extends AppCompatActivity {
                 uid = user.getUserId();
             }
         }
-        Log.d("abc",uid);
         fl = findViewById(R.id.framelayout);
         nv = findViewById(R.id.navigation);
         dl = findViewById(R.id.drawerlayout);

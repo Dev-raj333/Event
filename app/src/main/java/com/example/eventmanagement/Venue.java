@@ -10,6 +10,7 @@ public class Venue {
     private String number;
 
     private String venueType;
+    private User user;
 
     // Empty constructor required for Firebase
     public Venue() {
@@ -31,7 +32,14 @@ public class Venue {
         this.email = email;
         this.number = number;
     }
-
+    public Venue( String name, String address, String occupancy, String email, String number,User user){
+        this.name = name;
+        this.address = address;
+        this.occupancy = occupancy;
+        this.email = email;
+        this.number = number;
+        this.user = user;
+    }
     // Getter and setter methods for all fields
     public String getVenueId() {
         return venueId;

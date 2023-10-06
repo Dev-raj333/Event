@@ -76,8 +76,6 @@ public class BookEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 saveEventData(uId,vId);
-                Intent i = new Intent(BookEventActivity.this,UserThirdActivity.class);
-               startActivity(i);
             }
         });
     }
@@ -125,7 +123,10 @@ public class BookEventActivity extends AppCompatActivity {
             Toast.makeText(BookEventActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }else{
-            myDbHelper.insertEvent(eventName, numberOfGuests, entryDate,exitDate, uid, vid);
+            String eventID = String.valueOf(myDbHelper.insertEvent(eventName, numberOfGuests, entryDate,exitDate, uid, vid,"pending"));
+            Intent i = new Intent(BookEventActivity.this,UserThirdActivity.class);
+            i.putExtra("eventID",eventID);
+            startActivity(i);
         }
     }
 

@@ -6,10 +6,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import kotlinx.coroutines.selects.WhileSelectKt;
 
 
 public class MyDbHelper extends SQLiteOpenHelper {
@@ -33,9 +36,9 @@ public class MyDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String table1 = "CREATE TABLE " + Table1 + "(id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT)";
         String table2 = "CREATE TABLE " + Table2 + "(uid INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT, address TEXT, phoneNumber TEXT)";
-        String table3 = "CREATE TABLE " + Table3 + "(vid INTEGER PRIMARY KEY AUTOINCREMENT, venueName TEXT, venueAddress TEXT, occupancy TEXT, email TEXT, phoneNumber TEXT)";
+        String table3 = "CREATE TABLE " + Table3 + "(vid INTEGER PRIMARY KEY AUTOINCREMENT, venueName TEXT, venueAddress TEXT, occupancy TEXT, email TEXT, phoneNumber TEXT, avgRating TEXT)";
         String table4 = "CREATE TABLE " + Table4 + "(rid INTEGER PRIMARY KEY AUTOINCREMENT, uid INTEGER, vid INTEGER, rating INTEGER, feedback TEXT, FOREIGN KEY(uid) REFERENCES User(uid),FOREIGN KEY(vid) REFERENCES Venue(vid))";
-        String table5 = "CREATE TABLE " + Table5 + "(eid INTEGER PRIMARY KEY AUTOINCREMENT, eventName TEXT, noGuest INTEGER, entryDate TEXT, exitDate TEXT, uid INTEGER, vid INTEGER, FOREIGN KEY(uid) REFERENCES User(uid),FOREIGN KEY(vid) REFERENCES Venue(vid))";
+        String table5 = "CREATE TABLE " + Table5 + "(eid INTEGER PRIMARY KEY AUTOINCREMENT, eventName TEXT, noGuest INTEGER, entryDate TEXT, exitDate TEXT, uid INTEGER, vid INTEGER, eventStatus TEXT,service TEXT, FOREIGN KEY(uid) REFERENCES User(uid),FOREIGN KEY(vid) REFERENCES Venue(vid))";
         db.execSQL(table1);
         db.execSQL(table2);
         db.execSQL(table3);
@@ -88,11 +91,11 @@ public class MyDbHelper extends SQLiteOpenHelper {
             return false;
         }
     }
-    public void updateUserPassword(String email, String password){
+    public void updateUserPassword(String id, String password){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("password", password);
-        db.update("User",contentValues,"email=?" , new String[] {email});
+        db.update("User",contentValues,"uid=?" , new String[] {id});
         db.close();
     }
     public void updateUser(String id, String username, String email, String password, String address, String phoneNumber){
@@ -182,7 +185,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
         db.delete("Venue","vid=?",new String[]{vid});
     }
     //Event
-    public void insertEvent(String eventName, String noGuest,String entryDate,String exitDate, String uid,String vid){
+    public long insertEvent(String eventName, String noGuest,String entryDate,String exitDate, String uid,String vid,String status){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("eventName", eventName);
@@ -191,15 +194,44 @@ public class MyDbHelper extends SQLiteOpenHelper {
         contentValues.put("exitDate", exitDate);
         contentValues.put("uid", uid);
         contentValues.put("vid", vid);
+        contentValues.put("eventStatus",status);
 
-        db.insert("Event", null, contentValues);
+        long id = db.insert("Event", null, contentValues);
+        db.close();
+        return id;
+    }
+    public void insertServiceEvent(String id,String service){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("service", service);
+
+        int rowAffected = db.update("Event",  contentValues, "eid=?",new String[]{id});
+        if(rowAffected>0){
+            Toast.makeText(context.getApplicationContext(), "Successfully inserted data",Toast.LENGTH_SHORT).show();
+        }
         db.close();
     }
-    public  Cursor selectEvent(){
+    public List<Event> selectEvent(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM Event";
+        String query = "SELECT * FROM Event INNER JOIN User ON Event.uid = User.uid INNER JOIN Venue ON EVENT.vid = Venue.vid";
         Cursor cursor = db.rawQuery(query, null);
-        return cursor;
+        List<Event> list = new ArrayList<>();
+        if(cursor.moveToNext()){
+            do{
+                @SuppressLint("Range") String eventName = cursor.getString(cursor.getColumnIndex("eventName"));
+                @SuppressLint("Range") String noGuest = cursor.getString(cursor.getColumnIndex("noGuest"));
+                @SuppressLint("Range") String venueName = cursor.getString(cursor.getColumnIndex("venueName"));
+                @SuppressLint("Range") String userName = cursor.getString(cursor.getColumnIndex("username"));
+                @SuppressLint("Range") String entryDate = cursor.getString(cursor.getColumnIndex("entryDate"));
+                @SuppressLint("Range") String exitDate = cursor.getString(cursor.getColumnIndex("exitDate"));
+                @SuppressLint("Range") String eStatus = cursor.getString(cursor.getColumnIndex("status"));
+                @SuppressLint("Range") String selectService = cursor.getString(cursor.getColumnIndex("service"));
+                Event event = new Event(venueName, venueAddress, occupancy, email, phoneNumber);
+                list.add(event);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
     }
     public void updateEvent(String eid ,String eventName, int noGuest,String entryDate,String exitDate, int uid,int vid){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -221,12 +253,13 @@ public class MyDbHelper extends SQLiteOpenHelper {
     }
 
     //Rating table
-    public void insertRating(String rid, String uid, String vid, int rating){
+    public void insertRating(String uid, String vid, String rating, String feedback){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("uid", uid);
         contentValues.put("vid",vid);
         contentValues.put("rating", rating);
+        contentValues.put("feedback", feedback);
 
         db.insert("Rating",null,contentValues);
         db.close();
@@ -261,6 +294,28 @@ public class MyDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("Admin","id=?", new String[]{String.valueOf(id)});
         db.close();
+    }
+
+    //for rating
+    public List<Venue> getEventVenue(String uid){
+        SQLiteDatabase db = this. getReadableDatabase();
+        String query = "SELECT * from event JOIN venue ON event.vid= venue.vid WHERE event.uid=?";
+        Cursor cursor = db.rawQuery(query,new String[]{uid});
+        List<Venue> list = new ArrayList<>();
+        if(cursor.moveToNext()){
+            do{
+                @SuppressLint("Range") String vid = cursor.getString(cursor.getColumnIndex("vid"));
+                @SuppressLint("Range") String venueName = cursor.getString(cursor.getColumnIndex("venueName"));
+                @SuppressLint("Range") String venueAddress = cursor.getString(cursor.getColumnIndex("venueAddress"));
+                @SuppressLint("Range") String occupancy = cursor.getString(cursor.getColumnIndex("occupancy"));
+                @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex("email"));
+                @SuppressLint("Range") String phoneNumber = cursor.getString(cursor.getColumnIndex("email"));
+                Venue venue = new Venue(vid, venueName, venueAddress, occupancy, email, phoneNumber);
+                list.add(venue);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
     }
 
 }

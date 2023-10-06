@@ -71,7 +71,6 @@ public class UserActivity extends AppCompatActivity {
         if(cursor.moveToNext()){
             do{
                 @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex("uid"));
-                Log.d("Id", id);
                 @SuppressLint("Range") String username = cursor.getString(cursor.getColumnIndex("username"));
                 @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex("email"));
                 @SuppressLint("Range") String password = cursor.getString(cursor.getColumnIndex("password"));
@@ -229,8 +228,8 @@ public class UserActivity extends AppCompatActivity {
                     replaceFragment(new ChangePasswordFragment(),finalUid);
                 }
 
-                if (id == R.id.review) {
-                    replaceFragment(new ReviewFragment(),finalUid);
+                if (id == R.id.fragment_container) {
+                    replaceFragment(new VenueReview(),finalUid);
 
                 }
 

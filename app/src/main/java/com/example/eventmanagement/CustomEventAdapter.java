@@ -55,39 +55,7 @@ public class CustomEventAdapter extends ArrayAdapter<Event> {
                 eventExitDate.setText(event.getExitDate());
             }
 
-            // Assuming the User class has a getEmail() method
-//            Event.User user = event.getUser(); // Get the User associated with this Event
-//
-//            if (user != null) {
-//                String userEmail = user.getEmail();
-//                // Display the user's email in a TextView (replace 'userEmailTextView' with your actual TextView)
-//                TextView userEmailTextView = convertView.findViewById(R.id.userEmailTextView);
-//                if (userEmailTextView != null) {
-//                    userEmailTextView.setText("User Email: " + userEmail);
-//                }
-//            }
-//
-
-
-//        if (event != null) {
-//            TextView eventNameTextView = convertView.findViewById(R.id.eventName);
-//            TextView eventHotelTextView = convertView.findViewById(R.id.eventHotels);
-//
-//            eventNameTextView.setText(event.getEventName());
-//            eventHotelTextView.setText(event.getSelectedHotel());
-
-            // Set an OnClickListener for each item
-//            convertView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // Handle item click here
-//                    String userID = event.getUserId();
-//                    // You can now use the userID as needed
-//                    Toast.makeText(getContext(), "User ID: " + userID, Toast.LENGTH_SHORT).show();
-//                }
-//            });
         }
-
         return convertView;
     }
 }

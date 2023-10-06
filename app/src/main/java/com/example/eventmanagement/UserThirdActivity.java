@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,15 +18,16 @@ public class UserThirdActivity extends AppCompatActivity {
     private LinearLayout servicesLayout;
     private Button saveButton;
     private String selectedServices = "";
-
+    MyDbHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_third);
         servicesLayout = findViewById(R.id.servicesLayout);
         saveButton = findViewById(R.id.btnsave);
-
-
+        String eid = getIntent().getStringExtra("eventID");
+        Log.d("eid",eid);
+        dbHelper = new MyDbHelper(this);
         View.OnClickListener serviceClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,8 +57,9 @@ public class UserThirdActivity extends AppCompatActivity {
                 // Remove the trailing comma and space
                 if (selectedServices.length() > 0) {
                     selectedServices = selectedServices.substring(0, selectedServices.length() - 2);
-                    Intent i = new Intent(UserThirdActivity.this, UserActivity.class);
-                    startActivity(i);
+                    dbHelper.insertServiceEvent(eid, selectedServices);
+                    Intent intent = new Intent(UserThirdActivity.this, UserActivity.class);
+                    startActivity(intent);
 
                 }
            }
@@ -71,7 +74,7 @@ public class UserThirdActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;

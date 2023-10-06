@@ -16,6 +16,7 @@ import java.util.List;
 public class AdminViewBookingFragment extends Fragment {
 
     private List<Event> eventList = new ArrayList<>();
+    MyDbHelper myDbHelper;
     private CustomEventAdapter customAdapter;
 
 
@@ -28,10 +29,8 @@ public class AdminViewBookingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_adminviewbooking, container, false);
+        myDbHelper = new MyDbHelper(getContext());
 
-        //confirmButton = view.findViewById(R.id.confirmbutton);
-
-        // Initialize ListView and CustomEventAdapter
         ListView listView = view.findViewById(R.id.adminlistview);
 
 

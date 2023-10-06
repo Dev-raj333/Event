@@ -11,6 +11,12 @@ public class Event {
     private String vId;
 
 
+    private String status;
+
+    private String venueName;
+    private String username;
+
+
     public Event(String eId, String selectedServices, String uid, String eventName, String numberOfGuests, String entryDate, String exitDate, String vId) {
         this.eId = eId;
         this.selectedServices = selectedServices;
@@ -20,6 +26,18 @@ public class Event {
         this.entryDate = entryDate;
         this.exitDate = exitDate;
         this.vId = vId;
+    }
+
+    public Event(String eId, String selectedServices, String uid, String eventName, String numberOfGuests, String entryDate, String exitDate, String vId, String status) {
+        this.eId = eId;
+        this.selectedServices = selectedServices;
+        this.uid = uid;
+        this.eventName = eventName;
+        this.numberOfGuests = numberOfGuests;
+        this.entryDate = entryDate;
+        this.exitDate = exitDate;
+        this.vId = vId;
+        this.status = status;
     }
 
     public String geteId() {
@@ -32,6 +50,14 @@ public class Event {
 
     public String getUid() {
         return uid;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getEventName() {
@@ -84,6 +110,22 @@ public class Event {
 
     public void setvId(String vId) {
         this.vId = vId;
+    }
+
+    public String getVenueName() {
+        return venueName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
 

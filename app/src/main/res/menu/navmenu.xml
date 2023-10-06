@@ -10,8 +10,6 @@
         android:id="@+id/profile"
         android:icon="@drawable/baseline_person_24"/>
 
-
-
     <item android:title="View Details"
         android:id="@+id/details"
         android:icon="@drawable/baseline_details_24" />
@@ -20,7 +18,7 @@
         android:id="@+id/changepw"
         android:icon="@drawable/baseline_password_24"/>
     <item android:title="Review"
-        android:id="@+id/review"
+        android:id="@+id/fragment_container"
         android:icon="@drawable/baseline_details_24"/>
 
 

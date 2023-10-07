@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <EditText
+        android:id="@+id/editName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name" />
+
+    <!-- Add EditText fields for Address, Occupancy, Email, and Contact No. -->
+    <EditText
+        android:id="@+id/editAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address" />
+    <EditText
+        android:id="@+id/occupancy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="100" />
+    <EditText
+        android:id="@+id/editEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="abc@gmail.com" />
+    <EditText
+        android:id="@+id/editContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="984000000" />
+
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
+</LinearLayout>

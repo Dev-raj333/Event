@@ -234,6 +234,29 @@ public class MyDbHelper extends SQLiteOpenHelper {
         cursor.close();
         return list;
     }
+    public List<Event> selectCompEvent(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT eid, eventName, noGuest, entryDate,exitDate,service,venueName,eventStatus, username from Event INNER JOIN Venue ON Event.vid = Venue.vid INNER JOIN User ON Event.uid = User.uid where eventStatus='completed'";
+        Cursor cursor = db.rawQuery(query, null);
+        List<Event> list = new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do{
+                @SuppressLint("Range") int eid = Integer.parseInt(cursor.getString(cursor.getColumnIndex("eid")));
+                @SuppressLint("Range") String eventName = cursor.getString(cursor.getColumnIndex("eventName"));
+                @SuppressLint("Range") String noGuest = cursor.getString(cursor.getColumnIndex("noGuest"));
+                @SuppressLint("Range") String venueName = cursor.getString(cursor.getColumnIndex("venueName"));
+                @SuppressLint("Range") String userName = cursor.getString(cursor.getColumnIndex("username"));
+                @SuppressLint("Range") String entryDate = cursor.getString(cursor.getColumnIndex("entryDate"));
+                @SuppressLint("Range") String exitDate = cursor.getString(cursor.getColumnIndex("exitDate"));
+                @SuppressLint("Range") String eStatus = cursor.getString(cursor.getColumnIndex("eventStatus"));
+                @SuppressLint("Range") String selectService = cursor.getString(cursor.getColumnIndex("service"));
+                Event event = new Event(eid, eventName,noGuest,entryDate,exitDate,selectService,venueName, userName,eStatus);
+                list.add(event);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
     public void updateEvent(String eid ){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

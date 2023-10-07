@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +63,12 @@ public class ServicesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_services, container, false);
+        View view = inflater.inflate(R.layout.fragment_services, container, false);
+        ListView list = view.findViewById(R.id.listView);
+        MyDbHelper myDbHelper = new MyDbHelper(getContext());
+        List<Event> eventList = myDbHelper.selectCompEvent();
+        ArrayAdapter<Event> adapter = new ArrayAdapter<>(requireContext(),R.layout.fragment_services,eventList);
+        list.setAdapter(adapter);
+        return view;
     }
 }

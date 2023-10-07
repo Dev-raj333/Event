@@ -6,9 +6,9 @@
         android:id="@+id/viewbooking"
         android:icon="@drawable/baseline_home_24"/>
 
-    <item android:title="Services"
-        android:id="@+id/services"
-        android:icon="@drawable/baseline_person_24"/>
+<!--    <item android:title="Services"-->
+<!--        android:id="@+id/services"-->
+<!--        android:icon="@drawable/baseline_person_24"/>-->
 
 
 

@@ -85,12 +85,12 @@ public class AdminActivity extends AppCompatActivity {
                     ft.commit();
                 }
 
-                if (id == R.id.services) {
-                    ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.framelayout, new ServicesFragment());
-                    ft.commit();
-
-                }
+//                if (id == R.id.services) {
+//                    ft = getSupportFragmentManager().beginTransaction();
+//                    ft.replace(R.id.framelayout, new ServicesFragment());
+//                    ft.commit();
+//
+//                }
                 if (id == R.id.venues) {
                     ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.framelayout, new AdminVenuesFragment());

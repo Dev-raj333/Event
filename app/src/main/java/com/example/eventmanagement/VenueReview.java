@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +24,7 @@ public class VenueReview extends Fragment {
     MyDbHelper dbHelper;
 
     boolean isFragmentVisible = false;
-    CustomVenueAdaptor customVenueAdaptor;
+    CustomVenueEditAdaptor customVenueEditAdaptor;
     public VenueReview() {
         // Required empty public constructor
     }
@@ -56,15 +54,15 @@ public class VenueReview extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_venue_review, container, false);
-        ListView listView = view.findViewById(R.id.list_view);
+        ListView listView = view.findViewById(R.id.listview1);
         String userId = getArguments().getString("userId");
-        Log.d("abc",userId);
+
 
         List<Venue> venueList = dbHelper.getEventVenue(userId);
 
 
-        customVenueAdaptor = new CustomVenueAdaptor(getActivity(), R.layout.fragment_venue_review, venueList);
-        listView.setAdapter(customVenueAdaptor);
+        customVenueEditAdaptor = new CustomVenueEditAdaptor(getActivity(), R.layout.fragment_venue_review, venueList);
+        listView.setAdapter(customVenueEditAdaptor);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

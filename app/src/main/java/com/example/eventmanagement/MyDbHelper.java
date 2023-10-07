@@ -139,7 +139,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
     }
     public List<Venue> getAllVenues() {
         List<Venue> venueList = new ArrayList<>();
-        String selectQuery = "SELECT * FROM Venue";
+        String selectQuery = "SELECT * FROM Venue ORDER BY avgRating DESC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -213,11 +213,12 @@ public class MyDbHelper extends SQLiteOpenHelper {
     }
     public List<Event> selectEvent(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT eventName, noGuest, entryDate,exitDate,service,venueName,eventStatus, username from Event INNER JOIN Venue ON Event.vid = Venue.vid INNER JOIN User ON Event.uid = User.uid";
+        String query = "SELECT eid, eventName, noGuest, entryDate,exitDate,service,venueName,eventStatus, username from Event INNER JOIN Venue ON Event.vid = Venue.vid INNER JOIN User ON Event.uid = User.uid where eventStatus='pending'";
         Cursor cursor = db.rawQuery(query, null);
         List<Event> list = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
+                @SuppressLint("Range") int eid = Integer.parseInt(cursor.getString(cursor.getColumnIndex("eid")));
                 @SuppressLint("Range") String eventName = cursor.getString(cursor.getColumnIndex("eventName"));
                 @SuppressLint("Range") String noGuest = cursor.getString(cursor.getColumnIndex("noGuest"));
                 @SuppressLint("Range") String venueName = cursor.getString(cursor.getColumnIndex("venueName"));
@@ -226,23 +227,17 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String exitDate = cursor.getString(cursor.getColumnIndex("exitDate"));
                 @SuppressLint("Range") String eStatus = cursor.getString(cursor.getColumnIndex("eventStatus"));
                 @SuppressLint("Range") String selectService = cursor.getString(cursor.getColumnIndex("service"));
-                Event event = new Event(eventName,noGuest,entryDate,exitDate,selectService,venueName, userName);
+                Event event = new Event(eid, eventName,noGuest,entryDate,exitDate,selectService,venueName, userName,eStatus);
                 list.add(event);
             }while (cursor.moveToNext());
         }
         cursor.close();
         return list;
     }
-    public void updateEvent(String eid ,String eventName, int noGuest,String entryDate,String exitDate, int uid,int vid){
+    public void updateEvent(String eid ){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("eventName", eventName);
-        contentValues.put("noGuest", noGuest);
-        contentValues.put("entryDate", entryDate);
-        contentValues.put("exitDate", exitDate);
-        contentValues.put("uid", uid);
-        contentValues.put("vid", vid);
-
+        contentValues.put("eventStatus", "completed");
         db.update("Event",contentValues,"eid=?" , new String[] {eid});
         db.close();
     }
@@ -250,6 +245,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
     public void deleteEvent(String id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("Event","eid=?",new String[]{id});
+        db.close();
     }
 
     //Rating table
@@ -317,5 +313,36 @@ public class MyDbHelper extends SQLiteOpenHelper {
         cursor.close();
         return list;
     }
+
+    public float calculateAvg(String vid){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT AVG(rating_value) FROM ratings WHERE vid =?";
+        String[] selectArgs = {String.valueOf(vid)};
+        Cursor cursor = db.rawQuery(query, selectArgs);
+
+        float averageRating = 0;
+
+        if (cursor.moveToFirst()) {
+            averageRating = cursor.getFloat(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return averageRating;
+    }
+    public void updateAvg(String vId, float newAvg){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("avgRating", newAvg);
+
+        String[] whereArgs = { String.valueOf(vId) };
+
+        db.update("venue", values, "vid=?", whereArgs);
+
+        db.close();
+    }
+
 
 }

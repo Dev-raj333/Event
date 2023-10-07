@@ -24,7 +24,7 @@ public class ReviewActivity extends AppCompatActivity {
         feedbackEditText = findViewById(R.id.feedbackEditText);
         ratingBar = findViewById(R.id.ratingBar);
         submitButton = findViewById(R.id.submitButton);
-        String userId = getIntent().getStringExtra("userId");
+        String userId = getIntent().getStringExtra("uid");
         String vId = getIntent().getStringExtra("vid");
         myDbHelper = new MyDbHelper(this);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -35,10 +35,13 @@ public class ReviewActivity extends AppCompatActivity {
         });
     }
     private void submitReview(String userId,String vId) {
+        String s= userId;
         String feedback = feedbackEditText.getText().toString();
         String rating = String.valueOf(ratingBar.getRating());
         myDbHelper.insertRating(userId,vId, rating, feedback);
-        String message = "Feedback: " + feedback + "\nRating: " + rating;
+        float avgRating = myDbHelper.calculateAvg(vId);
+        myDbHelper.updateAvg(vId, avgRating);
+                String message = "Feedback: " + feedback + "\nRating: " + rating;
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, UserActivity.class);
         startActivity(intent);

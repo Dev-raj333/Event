@@ -17,17 +17,18 @@ public class Event {
     private String username;
 
 
-    public Event(String eId, String selectedServices, String uid, String eventName, String numberOfGuests, String entryDate, String exitDate, String vId) {
-        this.eId = eId;
-        this.selectedServices = selectedServices;
-        this.uid = uid;
-        this.eventName = eventName;
-        this.numberOfGuests = numberOfGuests;
-        this.entryDate = entryDate;
-        this.exitDate = exitDate;
-        this.vId = vId;
-    }
-    public Event(String eventName, String numberOfGuests, String entryDate, String exitDate, String selectedServices,String venueName, String username){
+//    public Event(String eId, String selectedServices, String uid, String eventName, String numberOfGuests, String entryDate, String exitDate, String vId) {
+//        this.eId = eId;
+//        this.selectedServices = selectedServices;
+//        this.uid = uid;
+//        this.eventName = eventName;
+//        this.numberOfGuests = numberOfGuests;
+//        this.entryDate = entryDate;
+//        this.exitDate = exitDate;
+//        this.vId = vId;
+//    }
+    public Event(int eid, String eventName, String numberOfGuests, String entryDate, String exitDate, String selectedServices,String venueName, String username,String status){
+        this.eId = String.valueOf(eid);
         this.eventName= eventName;
         this.numberOfGuests = numberOfGuests;
         this.entryDate = entryDate;
@@ -35,6 +36,7 @@ public class Event {
         this.selectedServices = selectedServices;
         this.venueName = venueName;
         this.username = username;
+        this.status = status;
     }
     public Event(String eId, String selectedServices, String uid, String eventName, String numberOfGuests, String entryDate, String exitDate, String vId, String status) {
         this.eId = eId;

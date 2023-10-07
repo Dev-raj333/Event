@@ -219,7 +219,6 @@ public class UserActivity extends AppCompatActivity {
                     replaceFragment(new UserProfileFragment(), finalUid);
                 }
 
-
                 if (id == R.id.details) {
                     replaceFragment(new UserViewDetailsFragment(), finalUid);
                 }
@@ -232,7 +231,6 @@ public class UserActivity extends AppCompatActivity {
                     replaceFragment(new VenueReview(),finalUid);
 
                 }
-
 
                 if (id == R.id.logout) {
                     replaceFragment(new LogoutFragment(), finalUid);

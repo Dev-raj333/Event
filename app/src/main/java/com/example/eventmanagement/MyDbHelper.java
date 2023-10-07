@@ -305,8 +305,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 @SuppressLint("Range") String venueAddress = cursor.getString(cursor.getColumnIndex("venueAddress"));
                 @SuppressLint("Range") String occupancy = cursor.getString(cursor.getColumnIndex("occupancy"));
                 @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex("email"));
-                @SuppressLint("Range") String phoneNumber = cursor.getString(cursor.getColumnIndex("email"));
-                Venue venue = new Venue(vid, venueName, venueAddress, occupancy, email, phoneNumber);
+                @SuppressLint("Range") String phoneNumber = cursor.getString(cursor.getColumnIndex("phoneNumber"));
+                Venue venue = new Venue(vid, venueName, venueAddress, occupancy, email,phoneNumber);
                 list.add(venue);
             }while (cursor.moveToNext());
         }
@@ -316,7 +316,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
     public float calculateAvg(String vid){
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT AVG(rating_value) FROM ratings WHERE vid =?";
+        String query = "SELECT AVG(rating) FROM Rating WHERE vid =?";
         String[] selectArgs = {String.valueOf(vid)};
         Cursor cursor = db.rawQuery(query, selectArgs);
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class VenueReview extends Fragment {
         View view =inflater.inflate(R.layout.fragment_venue_review, container, false);
         ListView listView = view.findViewById(R.id.list_view);
         String userId = getArguments().getString("userId");
-
+        Log.d("abc",userId);
 
         List<Venue> venueList = dbHelper.getEventVenue(userId);
 
